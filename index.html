@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn Hub Pro - Advanced Creator Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            background: #f5f5f5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-left, .sidebar-right {
+                display: none;
+            }
+        }
+
+        /* Left Sidebar - Categories */
+        .sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-btn {
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #666;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .category-btn:hover {
+            background: #efefef;
+        }
+
+        .category-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Main Feed */
+        .main-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .create-post {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .create-post-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .post-form {
+            flex: 1;
+        }
+
+        .post-form input, .post-form textarea, .post-form select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+
+        .post-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .post-form-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .post-form-actions input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .publish-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .publish-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Post Card */
+        .post {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .post-creator-info {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .creator-details h3 {
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        .creator-details h3:hover {
+            text-decoration: underline;
+        }
+
+        .creator-meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .post-category {
+            display: inline-block;
+            background: #f0f4ff;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .post-menu {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .post-content {
+            padding: 0 15px 15px 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .post-stats {
+            padding: 12px 15px;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .post-actions {
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #efefef;
+        }
+
+        .action-btn.liked {
+            color: #e74c3c;
+        }
+
+        .tip-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            flex: 1.5;
+        }
+
+        .tip-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 15px;
+            border-top: 1px solid #f0f0f0;
+            background: #fafbfc;
+        }
+
+        .comment {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .comment-text {
+            margin-top: 4px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .comment-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        .follow-btn {
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .follow-btn.following {
+            background: #ddd;
+            color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            clear: both;
+        }
+
+        .tip-amounts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tip-btn-option {
+            padding: 12px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.2s;
+        }
+
+        .tip-btn-option:hover {
+            border-color: #667eea;
+        }
+
+        .tip-btn-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .profile-stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message-item {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .message-item:hover {
+            background: #efefef;
+        }
+
+        .message-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .message-preview {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .message-thread {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-bubble {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 13px;
+        }
+
+        .message-bubble.sent {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .message-input-area input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .message-send-btn {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="logo">💰 Earn Hub Pro</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search posts..." onkeyup="searchPosts()">
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="switchView('feed')">Feed</button>
+                <button class="nav-btn" onclick="switchView('profile')">Profile</button>
+                <button class="nav-btn" onclick="switchView('messages')">Messages</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Feed View -->
+        <div id="feedView" class="view active">
+            <div class="layout">
+                <!-- Left Sidebar - Categories -->
+                <div class="sidebar-left">
+                    <div class="sidebar-card">
+                        <h3>Categories</h3>
+                        <div class="category-list">
+                            <button class="category-btn active" onclick="filterByCategory('all')">All Posts</button>
+                            <button class="category-btn" onclick="filterByCategory('tech')">🚀 Tech</button>
+                            <button class="category-btn" onclick="filterByCategory('design')">🎨 Design</button>
+                            <button class="category-btn" onclick="filterByCategory('business')">💼 Business</button>
+                            <button class="category-btn" onclick="filterByCategory('lifestyle')">🌟 Lifestyle</button>
+                            <button class="category-btn" onclick="filterByCategory('education')">📚 Education</button>
+                            <button class="category-btn" onclick="filterByCategory('art')">🖼️ Art</button>
+                            <button class="category-btn" onclick="filterByCategory('other')">✨ Other</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Feed -->
+                <div class="main-feed">
+                    <!-- Create Post -->
+                    <div class="create-post">
+                        <div class="create-post-input">
+                            <div class="avatar" id="createAvatar">U</div>
+                            <div class="post-form">
+                                <input type="text" id="creatorName" placeholder="Your name" value="User" maxlength="20" onchange="updateAvatar()">
+                                <textarea id="postText" placeholder="Share your ideas, projects, or thoughts..."></textarea>
+                                <select id="postCategory">
+                                    <option value="tech">🚀 Tech</option>
+                                    <option value="design">🎨 Design</option>
+                                    <option value="business">💼 Business</option>
+                                    <option value="lifestyle">🌟 Lifestyle</option>
+                                    <option value="education">📚 Education</option>
+                                    <option value="art">🖼️ Art</option>
+                                    <option value="other">✨ Other</option>
+                                </select>
+                                <div class="post-form-actions">
+                                    <input type="text" id="postImage" placeholder="Image URL (optional)">
+                                    <button class="publish-btn" onclick="publishPost()">Post</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Posts Feed -->
+                    <div id="postsFeed"></div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="sidebar-right">
+                    <!-- Your Stats -->
+                    <div class="card">
+                        <h3>Your Stats</h3>
+                        <div class="stat-grid">
+                            <div class="stat-box">
+                                <div class="stat-value" id="sidebarEarnings">$0</div>
+                                <div class="stat-label">Earnings</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="sidebarPosts">0</div>
+                                <div class="stat-label">Posts</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="sidebarLikes">0</div>
+                                <div class="stat-label">Likes</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="sidebarFollowing">0</div>
+                                <div class="stat-label">Following</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggested Users -->
+                    <div class="card">
+                        <h3>Suggested Creators</h3>
+                        <div class="user-list" id="suggestedUsers"></div>
+                    </div>
+
+                    <!-- Top Earners -->
+                    <div class="card">
+                        <h3>Top Earners</h3>
+                        <div class="user-list" id="topEarners"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profileView" class="view">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <h2 id="profileName">User</h2>
+                <p style="color: #999;">Content Creator</p>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileEarnings">$0</div>
+                        <div class="profile-stat-label">Earnings</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profilePosts">0</div>
+                        <div class="profile-stat-label">Posts</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileLikes">0</div>
+                        <div class="profile-stat-label">Likes</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileFollowers">0</div>
+                        <div class="profile-stat-label">Followers</div>
+                    </div>
+                </div>
+            </div>
+            <div id="myPostsFeed"></div>
+        </div>
+
+        <!-- Messages View -->
+        <div id="messagesView" class="view">
+            <div class="layout" style="grid-template-columns: 250px 1fr;">
+                <div class="sidebar-card" style="height: fit-content; position: sticky; top: 80px;">
+                    <h3>Messages</h3>
+                    <div class="message-list" id="messageList"></div>
+                </div>
+                <div id="messageThread" style="display: none;">
+                    <button onclick="backToMessages()" style="margin-bottom: 15px; padding: 8px 16px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;">← Back</button>
+                    <div class="card">
+                        <div id="messageContent"></div>
+                    </div>
+                </div>
+                <div id="noMessages" style="display: flex; align-items: center; justify-content: center; height: 500px; color: #999;">
+                    <p>Select a conversation to start messaging</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tip Modal -->
+    <div class="modal" id="tipModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeTipModal()">×</span>
+            <div class="modal-title">💰 Support Creator</div>
+            <div style="font-size: 16px; font-weight: 600; color: #667eea; margin-bottom: 20px;" id="tipCreatorName"></div>
+            <p style="font-size: 13px; color: #999; margin-bottom: 15px;">Select tip amount:</p>
+            <div class="tip-amounts">
+                <button class="tip-btn-option" onclick="selectTipAmount(1)">$1</button>
+                <button class="tip-btn-option" onclick="selectTipAmount(5)">$5</button>
+                <button class="tip-btn-option" onclick="selectTipAmount(10)">$10</button>
+                <button class="tip-btn-option" onclick="selectTipAmount(25)">$25</button>
+            </div>
+            <button class="confirm-btn" onclick="confirmTip()">Send Tip</button>
+            <button class="cancel-btn" onclick="closeTipModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeUserModal()">×</span>
+            <div id="userModalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        let posts = [];
+        let currentUser = 'User';
+        let following = [];
+        let messages = {};
+        let selectedTipAmount = 0;
+        let tipTargetId = null;
+        let currentFilter = 'all';
+
+        // Init
+        function init() {
+            loadData();
+            if (posts.length === 0) addSampleData();
+            updateAvatar();
+            renderFeed();
+        }
+
+        function updateAvatar() {
+            currentUser = document.getElementById('creatorName').value.trim() || 'User';
+            const initial = currentUser[0].toUpperCase();
+            document.getElementById('createAvatar').textContent = initial;
+            document.getElementById('profileAvatar').textContent = initial;
+            saveData();
+        }
+
+        // Publish Post
+        function publishPost() {
+            const name = document.getElementById('creatorName').value.trim();
+            const text = document.getElementById('postText').value.trim();
+            const image = document.getElementById('postImage').value.trim();
+            const category = document.getElementById('postCategory').value;
+
+            if (!name || !text) {
+                alert('Please enter your name and post content');
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                creator: name,
+                content: text,
+                image: image || null,
+                category: category,
+                likes: 0,
+                tips: 0,
+                liked: false,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                comments: []
+            };
+
+            posts.unshift(post);
+            document.getElementById('postText').value = '';
+            document.getElementById('postImage').value = '';
+            saveData();
+            renderFeed();
+        }
+
+        // Render Feed
+        function renderFeed() {
+            const feed = document.getElementById('postsFeed');
+            let filteredPosts = posts;
+
+            if (currentFilter !== 'all') {
+                filteredPosts = posts.filter(p => p.category === currentFilter);
+            }
+
+            if (filteredPosts.length === 0) {
+                feed.innerHTML = '<div class="empty-state"><p>No posts yet. Be the first to create! 🚀</p></div>';
+                return;
+            }
+
+            feed.innerHTML = filteredPosts.map(post => {
+                const initial = post.creator[0].toUpperCase();
+                return `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-creator-info">
+                                <div class="avatar">${initial}</div>
+                                <div class="creator-details">
+                                    <h3 onclick="viewUserProfile('${post.creator}')">${post.creator}</h3>
+                                    <div class="creator-meta">
+                                        <span>${post.timestamp}</span>
+                                        <span class="post-category">${getCategoryEmoji(post.category)} ${capitalizeCategory(post.category)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-menu">⋯</div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        ${post.image ? `<img src="${post.image}" alt="post" class="post-image" onerror="this.style.display='none'">` : ''}
+                        <div class="post-stats">
+                            <span>❤️ ${post.likes} likes</span>
+                            <span>💬 ${post.comments.length} comments</span>
+                            <span>💰 $${post.tips} earned</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                                ${post.liked ? '❤️ Liked' : '🤍 Like'}
+                            </button>
+                            <button class="action-btn" onclick="openComments(${post.id})">💬 Comment</button>
+                            <button class="action-btn tip-btn" onclick="openTipModal(${post.id})">💰 Tip ${post.creator}</button>
+                        </div>
+                        <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                            <div id="comments-list-${post.id}"></div>
+                            <div class="comment-input">
+                                <input type="text" placeholder="Add a comment..." id="comment-input-${post.id}">
+                                <button class="comment-btn" onclick="addComment(${post.id})">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateStats();
+        }
+
+        function getCategoryEmoji(category) {
+            const emojis = {
+                tech: '🚀',
+                design: '🎨',
+                business: '💼',
+                lifestyle: '🌟',
+                education: '📚',
+                art: '🖼️',
+                other: '✨'
+            };
+            return emojis[category] || '✨';
+        }
+
+        function capitalizeCategory(category) {
+            return category.charAt(0).toUpperCase() + category.slice(1);
+        }
+
+        // Comments
+        function openComments(postId) {
+            const section = document.getElementById(`comments-${postId}`);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+            renderComments(postId);
+        }
+
+        function renderComments(postId) {
+            const post = posts.find(p => p.id === postId);
+            const list = document.getElementById(`comments-list-${postId}`);
+            
+            if (post.comments.length === 0) {
+                list.innerHTML = '<p style="font-size: 12px; color: #999;">No comments yet</p>';
+                return;
+            }
+
+            list.innerHTML = post.comments.map(comment => `
+                <div class="comment">
+                    <span class="comment-author">${comment.author}</span>
+                    <div class="comment-text">${comment.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function addComment(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const post = posts.find(p => p.id === postId);
+            post.comments.push({
+                author: currentUser,
+                text: text
+            });
+
+            input.value = '';
+            saveData();
+            renderComments(postId);
+        }
+
+        // Like
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                saveData();
+                renderFeed();
+            }
+        }
+
+        // Filter
+        function filterByCategory(category) {
+            currentFilter = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderFeed();
+        }
+
+        // Search
+        function searchPosts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const feed = document.getElementById('postsFeed');
+
+            if (!query) {
+                renderFeed();
+                return;
+            }
+
+            const results = posts.filter(p => 
+                p.content.toLowerCase().includes(query) ||
+                p.creator.toLowerCase().includes(query)
+            );
+
+            if (results.length === 0) {
+                feed.innerHTML = '<div class="empty-state"><p>No posts found</p></div>';
+                return;
+            }
+
+            feed.innerHTML = results.map(post => {
+                const initial = post.creator[0].toUpperCase();
+                return `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-creator-info">
+                                <div class="avatar">${initial}</div>
+                                <div class="creator-details">
+                                    <h3>${post.creator}</h3>
+                                    <div class="creator-meta"><span class="post-category">${getCategoryEmoji(post.category)} ${capitalizeCategory(post.category)}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-stats">
+                            <span>❤️ ${post.likes}</span>
+                            <span>💰 $${post.tips}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Tip System
+        function openTipModal(postId) {
+            tipTargetId = postId;
+            selectedTipAmount = 0;
+            const post = posts.find(p => p.id === postId);
+            document.getElementById('tipCreatorName').textContent = post.creator;
+            document.querySelectorAll('.tip-btn-option').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('tipModal').classList.add('active');
+        }
+
+        function selectTipAmount(amount) {
+            selectedTipAmount = amount;
+            document.querySelectorAll('.tip-btn-option').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function confirmTip() {
+            if (!selectedTipAmount) {
+                alert('Select a tip amount');
+                return;
+            }
+
+            const post = posts.find(p => p.id === tipTargetId);
+            post.tips += selectedTipAmount;
+            alert(`✅ Tipped $${selectedTipAmount} to ${post.creator}!`);
+            closeTipModal();
+            saveData();
+            renderFeed();
+        }
+
+        function closeTipModal() {
+            document.getElementById('tipModal').classList.remove('active');
+            selectedTipAmount = 0;
+        }
+
+        // User Profiles
+        function viewUserProfile(username) {
+            const userPosts = posts.filter(p => p.creator === username);
+            const earnings = userPosts.reduce((s, p) => s + p.tips, 0);
+
+            let html = `
+                <div style="text-align: center;">
+                    <div class="profile-avatar" style="width: 60px; height: 60px; font-size: 28px; margin: 0 auto 15px;">${username[0].toUpperCase()}</div>
+                    <h2>${username}</h2>
+                    <p>Earnings: $${earnings}</p>
+                    <p>Posts: ${userPosts.length}</p>
+                    <button class="follow-btn" onclick="followUser('${username}')" style="margin-top: 15px;">Follow</button>
+                    <button class="follow-btn" onclick="openMessage('${username}')" style="margin-top: 10px; background: #667eea;">Message</button>
+                </div>
+            `;
+
+            document.getElementById('userModalContent').innerHTML = html;
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        function followUser(username) {
+            if (!following.includes(username)) {
+                following.push(username);
+                alert(`✅ Now following ${username}!`);
+                saveData();
+                updateStats();
+            }
+        }
+
+        // Messages
+        function openMessage(username) {
+            closeUserModal();
+            switchView('messages');
+            renderMessages(username);
+        }
+
+        function renderMessages(username) {
+            if (!messages[username]) {
+                messages[username] = [];
+            }
+
+            document.getElementById('messageThread').style.display = 'block';
+            document.getElementById('noMessages').style.display = 'none';
+
+            let content = `<h3>${username}</h3>`;
+            content += '<div class="message-thread" style="margin-bottom: 20px;">';
+            
+            messages[username].forEach(msg => {
+                content += `<div class="message-bubble ${msg.sent ? 'sent' : ''}">${msg.text}</div>`;
+            });
+
+            content += '</div>';
+            content += `<div class="message-input-area">
+                <input type="text" id="message-input-${username}" placeholder="Type a message...">
+                <button class="message-send-btn" onclick="sendMessage('${username}')">Send</button>
+            </div>`;
+
+            document.getElementById('messageContent').innerHTML = content;
+            setTimeout(() => document.getElementById(`message-input-${username}`).focus(), 100);
+        }
+
+        function sendMessage(username) {
+            const input = document.getElementById(`message-input-${username}`);
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            messages[username].push({ text, sent: true });
+            input.value = '';
+            saveData();
+            renderMessages(username);
+        }
+
+        function backToMessages() {
+            document.getElementById('messageThread').style.display = 'none';
+            document.getElementById('noMessages').style.display = 'flex';
+        }
+
+        // Stats
+        function updateStats() {
+            const userPosts = posts.filter(p => p.creator === currentUser);
+            const earnings = userPosts.reduce((s, p) => s + p.tips, 0);
+            const likes = userPosts.reduce((s, p) => s + p.likes, 0);
+
+            document.getElementById('sidebarEarnings').textContent = '$' + earnings;
+            document.getElementById('sidebarPosts').textContent = userPosts.length;
+            document.getElementById('sidebarLikes').textContent = likes;
+            document.getElementById('sidebarFollowing').textContent = following.length;
+
+            // Top Earners
+            const creators = {};
+            posts.forEach(p => {
+                creators[p.creator] = (creators[p.creator] || 0) + p.tips;
+            });
+
+            const topEarners = Object.entries(creators)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            document.getElementById('topEarners').innerHTML = topEarners.map(([name, earnings]) => `
+                <div class="user-item">
+                    <span class="user-name" onclick="viewUserProfile('${name}')">${name}</span>
+                    <span>$${earnings}</span>
+                </div>
+            `).join('');
+
+            // Suggested Users
+            const allCreators = [...new Set(posts.map(p => p.creator))];
+            const notFollowing = allCreators.filter(c => c !== currentUser && !following.includes(c));
+            const suggested = notFollowing.slice(0, 5);
+
+            document.getElementById('suggestedUsers').innerHTML = suggested.map(name => `
+                <div class="user-item">
+                    <span class="user-name" onclick="viewUserProfile('${name}')">${name}</span>
+                    <button class="follow-btn" onclick="followUser('${name}')">Follow</button>
+                </div>
+            `).join('');
+
+            // Profile
+            document.getElementById('profileName').textContent = currentUser;
+            document.getElementById('profileEarnings').textContent = '$' + earnings;
+            document.getElementById('profilePosts').textContent = userPosts.length;
+            document.getElementById('profileLikes').textContent = likes;
+            document.getElementById('profileFollowers').textContent = following.length;
+
+            // My Posts
+            document.getElementById('myPostsFeed').innerHTML = userPosts.length === 0 
+                ? '<div class="empty-state"><p>You haven\'t posted yet</p></div>'
+                : userPosts.map(post => `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-creator-info">
+                                <div class="avatar">${currentUser[0].toUpperCase()}</div>
+                                <div class="creator-details">
+                                    <h3>${post.creator}</h3>
+                                    <div class="creator-meta"><span class="post-category">${getCategoryEmoji(post.category)} ${capitalizeCategory(post.category)}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        ${post.image ? `<img src="${post.image}" alt="post" class="post-image" onerror="this.style.display='none'">` : ''}
+                        <div class="post-stats">
+                            <span>❤️ ${post.likes}</span>
+                            <span>💬 ${post.comments.length}</span>
+                            <span>💰 $${post.tips}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+            // Messages List
+            const allUsers = [...new Set(posts.map(p => p.creator))];
+            document.getElementById('messageList').innerHTML = allUsers
+                .filter(u => u !== currentUser)
+                .map(user => `
+                    <div class="message-item" onclick="openMessage('${user}')">
+                        <div class="message-name">${user}</div>
+                        <div class="message-preview">Click to message</div>
+                    </div>
+                `).join('');
+        }
+
+        // View Switch
+        function switchView(view) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            if (view === 'feed') {
+                document.getElementById('feedView').classList.add('active');
+                document.querySelector('[onclick="switchView(\'feed\')"]').classList.add('active');
+                renderFeed();
+            } else if (view === 'profile') {
+                document.getElementById('profileView').classList.add('active');
+                document.querySelector('[onclick="switchView(\'profile\')"]').classList.add('active');
+                updateStats();
+            } else if (view === 'messages') {
+                document.getElementById('messagesView').classList.add('active');
+                document.querySelector('[onclick="switchView(\'messages\')"]').classList.add('active');
+                updateStats();
+            }
+        }
+
+        // Sample Data
+        function addSampleData() {
+            posts = [
+                {
+                    id: 5,
+                    creator: 'Alex',
+                    content: 'Just launched my new design system! Built with React and Tailwind. Super excited about this one.',
+                    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=300&fit=crop',
+                    category: 'design',
+                    likes: 28,
+                    tips: 120,
+                    liked: false,
+                    timestamp: '2h ago',
+                    comments: [{ author: 'Sam', text: 'Looks amazing!' }]
+                },
+                {
+                    id: 4,
+                    creator: 'Jordan',
+                    content: 'Startup founders: Focus on retention before growth. Your LTV matters more than your CAC at early stage.',
+                    image: null,
+                    category: 'business',
+                    likes: 42,
+                    tips: 85,
+                    liked: false,
+                    timestamp: '4h ago',
+                    comments: []
+                },
+                {
+                    id: 3,
+                    creator: 'Sam',
+                    content: 'Morning run at sunrise. Nothing beats that fresh air and endorphins to start the day! 🏃‍♀️',
+                    image: 'https://images.unsplash.com/photo-1552674605-5defe6aa44bb?w=500&h=300&fit=crop',
+                    category: 'lifestyle',
+                    likes: 35,
+                    tips: 60,
+                    liked: false,
+                    timestamp: '6h ago',
+                    comments: []
+                },
+                {
+                    id: 2,
+                    creator: 'Emma',
+                    content: 'New tutorial: Building a real-time chat app with WebSockets. Complete code + step-by-step guide available now.',
+                    image: null,
+                    category: 'education',
+                    likes: 51,
+                    tips: 180,
+                    liked: false,
+                    timestamp: '8h ago',
+                    comments: [{ author: 'Alex', text: 'Great tutorial!' }]
+                },
+                {
+                    id: 1,
+                    creator: 'Chris',
+                    content: 'Digital illustration series: "Midnight Dreams" - What do you think? Which one is your favorite?',
+                    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=300&fit=crop',
+                    category: 'art',
+                    likes: 89,
+                    tips: 350,
+                    liked: false,
+                    timestamp: '12h ago',
+                    comments: []
+                }
+            ];
+            saveData();
+        }
+
+        // Data
+        function saveData() {
+            localStorage.setItem('earnhub_posts', JSON.stringify(posts));
+            localStorage.setItem('earnhub_user', currentUser);
+            localStorage.setItem('earnhub_following', JSON.stringify(following));
+            localStorage.setItem('earnhub_messages', JSON.stringify(messages));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('earnhub_posts');
+            const user = localStorage.getItem('earnhub_user');
+            const follow = localStorage.getItem('earnhub_following');
+            const msgs = localStorage.getItem('earnhub_messages');
+
+            if (saved) posts = JSON.parse(saved);
+            if (user) currentUser = user;
+            if (follow) following = JSON.parse(follow);
+            if (msgs) messages = JSON.parse(msgs);
+        }
+
+        init();
+    </script>
+</body>
+</html>
